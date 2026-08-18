@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250" role="img" aria-label="Resultado 6">
+  <defs>
+    <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F3ECE6"/>
+      <stop offset="100%" stop-color="#E1D4CA"/>
+    </linearGradient>
+    <linearGradient id="v6" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#8E1223" stop-opacity=".28"/>
+      <stop offset="60%" stop-color="#8E1223" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1250" fill="url(#g6)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2">
+    <path d="M-100 525 Q 350 225 1100 650"/>
+    <path d="M-100 825 Q 500 550 1100 975" stroke-opacity=".3"/>
+  </g>
+  <rect width="1000" height="1250" fill="url(#v6)"/>
+  <g transform="translate(500 550)">
+    <circle r="130" fill="#ffffff" fill-opacity=".55"/>
+    <circle r="130" fill="none" stroke="#8E1223" stroke-opacity=".5" stroke-width="2"/>
+    <text x="0" y="55" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+          font-size="155" fill="#8E1223" fill-opacity=".8">E</text>
+  </g>
+  <text x="500" y="775" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="32"
+        letter-spacing="8.0" fill="#5B5054" fill-opacity=".85">RESULTADO 6</text>
+  <text x="500" y="831" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="26"
+        fill="#5B5054" fill-opacity=".6">1000 x 1250px</text>
+</svg>

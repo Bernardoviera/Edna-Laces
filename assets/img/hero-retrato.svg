@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Foto principal">
+  <defs>
+    <linearGradient id="g0" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F7F1EB"/>
+      <stop offset="100%" stop-color="#E6DAD0"/>
+    </linearGradient>
+    <linearGradient id="v0" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#8E1223" stop-opacity=".28"/>
+      <stop offset="60%" stop-color="#8E1223" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#g0)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2">
+    <path d="M-90 504 Q 315 216 990 624"/>
+    <path d="M-90 792 Q 450 528 990 936" stroke-opacity=".3"/>
+  </g>
+  <rect width="900" height="1200" fill="url(#v0)"/>
+  <g transform="translate(450 528)">
+    <circle r="117" fill="#ffffff" fill-opacity=".55"/>
+    <circle r="117" fill="none" stroke="#8E1223" stroke-opacity=".5" stroke-width="1"/>
+    <text x="0" y="50" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+          font-size="140" fill="#8E1223" fill-opacity=".8">E</text>
+  </g>
+  <text x="450" y="744" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="29"
+        letter-spacing="7.2" fill="#5B5054" fill-opacity=".85">FOTO PRINCIPAL</text>
+  <text x="450" y="798" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="23"
+        fill="#5B5054" fill-opacity=".6">900 x 1200px</text>
+</svg>
