@@ -22,6 +22,16 @@
     el.setAttribute("rel", "noopener");
   });
 
+  /* Todo elemento com [data-checkout] aponta pro link de compra, quando existir.
+     Sem checkoutUrl configurado, mantém o href original (âncora pra seção de planos). */
+  if (CFG.checkoutUrl) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-checkout]"), function (el) {
+      el.setAttribute("href", CFG.checkoutUrl);
+      el.setAttribute("target", "_blank");
+      el.setAttribute("rel", "noopener");
+    });
+  }
+
   /* ---------- Dados vindos da configuração ---------- */
   var ig = document.querySelector("[data-instagram]");
   if (ig && CFG.instagram) {
@@ -57,111 +67,143 @@
     Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
   }
 
-  /* ---------- Barra fixa de CTA no mobile ---------- */
+  /* ---------- Barra fixa de CTA no mobile (com bounce só na 1ª aparição) ---------- */
   var stickyCta = document.querySelector(".sticky-cta");
   var hero = document.querySelector(".hero");
+  var stickyCtaBounced = false;
+
+  if (stickyCta) {
+    stickyCta.addEventListener("animationend", function (e) {
+      if (e.animationName === "sticky-bounce") { stickyCta.classList.remove("bounce-once"); }
+    });
+  }
 
   if (stickyCta && hero && "IntersectionObserver" in window) {
     var ctaObserver = new IntersectionObserver(function (entries) {
-      stickyCta.classList.toggle("is-visible", !entries[0].isIntersecting);
+      var visible = !entries[0].isIntersecting;
+      if (visible && !stickyCtaBounced) {
+        stickyCta.classList.add("bounce-once");
+        stickyCtaBounced = true;
+      }
+      stickyCta.classList.toggle("is-visible", visible);
     }, { threshold: 0 });
     ctaObserver.observe(hero);
   } else if (stickyCta) {
     stickyCta.classList.add("is-visible");
   }
 
-  /* ---------- Máscara simples de telefone ---------- */
-  var telefone = document.getElementById("telefone");
-  if (telefone) {
-    telefone.addEventListener("input", function () {
-      var d = telefone.value.replace(/\D/g, "").slice(0, 11);
-      var out = d;
-      if (d.length > 6) {
-        out = "(" + d.slice(0, 2) + ") " + d.slice(2, d.length > 10 ? 7 : 6) +
-              "-" + d.slice(d.length > 10 ? 7 : 6);
-      } else if (d.length > 2) {
-        out = "(" + d.slice(0, 2) + ") " + d.slice(2);
-      } else if (d.length > 0) {
-        out = "(" + d;
-      }
-      telefone.value = out;
-    });
+  /* ---------- Parallax sutil na textura do hero ---------- */
+  if (!prefersReduced && hero) {
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) { return; }
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        var offset = Math.max(-40, Math.min(40, window.scrollY * 0.12));
+        hero.style.setProperty("--parallax-y", offset + "px");
+        ticking = false;
+      });
+    }, { passive: true });
   }
 
-  /* ---------- Formulário: monta a mensagem e abre o WhatsApp ---------- */
-  var form = document.getElementById("form-agendamento");
-
-  function setError(input, message) {
-    var field = input.closest(".field");
-    var box = document.querySelector('[data-error-for="' + input.id + '"]');
-    var invalid = Boolean(message);
-
-    if (field) { field.classList.toggle("is-invalid", invalid); }
-    input.setAttribute("aria-invalid", invalid ? "true" : "false");
-
-    if (box) {
-      box.textContent = message || "";
-      box.hidden = !invalid;
-      if (invalid) { box.setAttribute("role", "alert"); }
-    }
-    return !invalid;
-  }
-
-  function validate(input) {
-    var value = input.value.trim();
-
-    if (input.id === "nome") {
-      if (value.length < 2) { return setError(input, "Escreva seu nome para eu saber como te chamar."); }
-      return setError(input, "");
-    }
-
-    if (input.id === "telefone") {
-      var digits = value.replace(/\D/g, "");
-      if (digits.length < 10) { return setError(input, "Informe um WhatsApp válido com DDD."); }
-      return setError(input, "");
-    }
-
-    return true;
-  }
-
-  if (form) {
-    ["nome", "telefone"].forEach(function (id) {
-      var input = document.getElementById(id);
-      if (!input) { return; }
-      /* valida ao sair do campo, não a cada tecla */
-      input.addEventListener("blur", function () { validate(input); });
-      input.addEventListener("input", function () {
-        if (input.closest(".field").classList.contains("is-invalid")) { validate(input); }
+  /* ---------- Leve inclinação 3D nos cards, acompanhando o mouse ---------- */
+  if (!prefersReduced && window.matchMedia("(hover: hover)").matches) {
+    Array.prototype.forEach.call(document.querySelectorAll(".card"), function (card) {
+      card.addEventListener("mousemove", function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = "perspective(800px) rotateX(" + (py * -6) + "deg) rotateY(" + (px * 6) + "deg)";
+      });
+      card.addEventListener("mouseleave", function () {
+        card.style.transform = "";
       });
     });
-
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      var nome = document.getElementById("nome");
-      var tel = document.getElementById("telefone");
-      var okNome = validate(nome);
-      var okTel = validate(tel);
-
-      if (!okNome || !okTel) {
-        (okNome ? tel : nome).focus();
-        return;
-      }
-
-      var objetivo = document.getElementById("objetivo");
-      var periodo = document.getElementById("periodo");
-
-      var mensagem =
-        "Olá, Edna! Meu nome é " + nome.value.trim() + "." +
-        "\nInteresse: " + (objetivo ? objetivo.value : "Lace sob medida") +
-        "\nMelhor período: " + (periodo ? periodo.value : "Qualquer horário") +
-        "\nMeu WhatsApp: " + tel.value.trim() +
-        "\n\nVim pelo site e gostaria de agendar uma avaliação.";
-
-      var status = document.getElementById("form-status");
-      if (status) { status.textContent = "Abrindo o WhatsApp com a sua mensagem…"; }
-
-      window.open(waLink(mensagem), "_blank", "noopener");
-    });
   }
+
+  /* ---------- Números dos passos contam de 0 até o valor final ---------- */
+  var stepNums = document.querySelectorAll(".step__num");
+  if (stepNums.length) {
+    if (prefersReduced || !("IntersectionObserver" in window)) {
+      /* já mostram o número final no HTML, nada a fazer */
+    } else {
+      var countObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) { return; }
+          var el = entry.target;
+          var target = parseInt(el.textContent, 10);
+          var start = null;
+          var duration = 700;
+          function tick(ts) {
+            if (start === null) { start = ts; }
+            var progress = Math.min(1, (ts - start) / duration);
+            var value = Math.round(progress * target);
+            el.textContent = value < 10 ? "0" + value : String(value);
+            if (progress < 1) { window.requestAnimationFrame(tick); }
+          }
+          window.requestAnimationFrame(tick);
+          countObserver.unobserve(el);
+        });
+      }, { threshold: 0.6 });
+      Array.prototype.forEach.call(stepNums, function (el) { countObserver.observe(el); });
+    }
+  }
+
+  /* ---------- Carrossel automático de depoimentos no mobile ---------- */
+  var quotesList = document.querySelector(".quotes");
+  if (quotesList) {
+    var quoteItems = Array.prototype.slice.call(quotesList.children);
+    var quoteIndex = 0;
+    var quoteTimer = null;
+    var carouselOn = false;
+    var mqCarousel = window.matchMedia("(max-width: 859px)");
+
+    function goToQuote(i) {
+      quoteIndex = (i + quoteItems.length) % quoteItems.length;
+      quotesList.style.transform = "translateX(-" + (quoteIndex * 100) + "%)";
+    }
+
+    function startCarousel() {
+      if (carouselOn) { return; }
+      carouselOn = true;
+      quotesList.style.display = "flex";
+      quoteItems.forEach(function (li) { li.style.flex = "0 0 100%"; });
+      quotesList.style.overflow = "hidden";
+      goToQuote(0);
+      if (!prefersReduced) {
+        quoteTimer = window.setInterval(function () { goToQuote(quoteIndex + 1); }, 5000);
+        quotesList.addEventListener("mouseenter", pauseCarousel);
+        quotesList.addEventListener("mouseleave", resumeCarousel);
+        quotesList.addEventListener("focusin", pauseCarousel);
+        quotesList.addEventListener("focusout", resumeCarousel);
+      }
+    }
+
+    function pauseCarousel() { if (quoteTimer) { window.clearInterval(quoteTimer); quoteTimer = null; } }
+    function resumeCarousel() {
+      if (!quoteTimer && !prefersReduced && carouselOn) {
+        quoteTimer = window.setInterval(function () { goToQuote(quoteIndex + 1); }, 5000);
+      }
+    }
+
+    function stopCarousel() {
+      if (!carouselOn) { return; }
+      carouselOn = false;
+      pauseCarousel();
+      quotesList.style.display = "";
+      quotesList.style.overflow = "";
+      quotesList.style.transform = "";
+      quoteItems.forEach(function (li) { li.style.flex = ""; });
+    }
+
+    function syncCarousel() {
+      if (mqCarousel.matches) { startCarousel(); } else { stopCarousel(); }
+    }
+
+    if (quoteItems.length > 1) {
+      syncCarousel();
+      if (mqCarousel.addEventListener) { mqCarousel.addEventListener("change", syncCarousel); }
+    }
+  }
+
 })();

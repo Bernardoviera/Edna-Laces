@@ -6,18 +6,23 @@
 
 window.SITE_CONFIG = {
 
-  /* WhatsApp que vai receber os contatos.
+  /* WhatsApp para dúvidas antes da compra.
      Formato: código do país + DDD + número, só dígitos.
      Exemplo: (11) 91234-5678  ->  "5511912345678"            */
   whatsapp: "5500000000000",
 
-  /* Mensagem que já vem escrita quando a cliente clica nos botões */
-  mensagemPadrao: "Olá, Edna! Vim pelo site e quero agendar uma avaliação para uma lace sob medida.",
+  /* Mensagem que já vem escrita quando a cliente clica em "falar no WhatsApp" */
+  mensagemPadrao: "Olá, Edna! Vim pelo site e tenho uma dúvida sobre o e-book/mentoria.",
 
   /* Usuário do Instagram, sem o @ */
   instagram: "ednacoutinhomegahair",
 
-  /* Informações de atendimento exibidas no rodapé */
-  endereco: "Atendimento com hora marcada",
-  horarios: "Seg a Sáb, mediante agendamento"
+  /* Informações de suporte exibidas no rodapé */
+  endereco: "Material digital, acesso após confirmação",
+  horarios: "Dúvidas por WhatsApp, Seg a Sáb",
+
+  /* AJUSTE: link de checkout da plataforma de infoproduto (Hotmart, Kiwify, Eduzz...).
+     Enquanto estiver vazio (""), os botões "Quero garantir o meu" levam para a
+     seção de comparação de planos em vez de uma página de pagamento. */
+  checkoutUrl: ""
 };

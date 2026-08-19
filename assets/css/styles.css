@@ -231,6 +231,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .btn--ghost:hover { background: rgba(142, 18, 35, .07); box-shadow: none; }
 
+/* sobre fundo escuro (hero dark / cta), o texto e a borda precisam ser claros, senão somem */
+.section--dark .btn--ghost, .cta .btn--ghost {
+  --btn-fg: var(--on-dark);
+  border-color: rgba(246, 237, 232, .4);
+}
+.section--dark .btn--ghost:hover, .cta .btn--ghost:hover { background: rgba(246, 237, 232, .1); }
+
 .btn--gold {
   --btn-bg: var(--gold-500);
   --btn-fg: #2A1B02;
@@ -454,6 +461,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .compare__table thead .is-highlight { color: var(--wine-800); background: rgba(142, 18, 35, .1); }
 .compare__table tbody tr:last-child th, .compare__table tbody tr:last-child td { border-bottom: 0; }
 
+.compare__note { margin: var(--sp-5) 0 0; text-align: center; color: var(--text-muted); font-size: .92rem; }
+
 /* ---------- 10. Passos ---------- */
 .steps { display: grid; gap: var(--sp-5); counter-reset: step; }
 .step {
@@ -567,16 +576,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   transition: background-color var(--dur) var(--ease-out);
 }
 .faq__item summary::-webkit-details-marker { display: none; }
-.faq__item summary::after {
-  content: "";
-  width: 12px; height: 12px; flex: none;
-  border-right: 2px solid var(--wine-700);
-  border-bottom: 2px solid var(--wine-700);
-  transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform var(--dur) var(--ease-out);
-}
 .faq__item[open] summary { background: rgba(142, 18, 35, .04); }
-.faq__item[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
 .faq__answer { padding: 0 var(--sp-5) var(--sp-5); }
 .faq__answer p { margin: 0; color: var(--text-muted); }
 .faq__item[open] .faq__answer { animation: fade-in var(--dur) var(--ease-out); }
@@ -593,56 +593,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .cta .section__head { margin-inline: auto; text-align: center; }
 .cta .eyebrow::after { margin-inline: auto; }
 
-.form {
+.cta__buy {
   display: grid; gap: var(--sp-4);
+  justify-items: center;
   padding: clamp(1.5rem, 4vw, 2.25rem);
   background: rgba(255, 255, 255, .06);
   border: 1px solid rgba(232, 211, 169, .28);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(4px);
 }
-.field { display: grid; gap: var(--sp-2); }
-.field label { font-size: .9rem; font-weight: 500; letter-spacing: .04em; color: var(--on-dark); }
-.field label span { color: var(--gold-200); }
-
-.field input, .field select {
-  width: 100%;
-  min-height: 48px;
-  padding: var(--sp-3) var(--sp-4);
-  font-family: inherit;
-  font-size: 1rem;                  /* 16px evita zoom no iOS */
-  color: var(--ink);
-  background: var(--white);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  transition: border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
-}
-.field select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--wine-700) 50%),
-                    linear-gradient(135deg, var(--wine-700) 50%, transparent 50%);
-  background-position: calc(100% - 20px) 51%, calc(100% - 14px) 51%;
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-  padding-right: var(--sp-8);
-}
-.field input::placeholder { color: #9A9095; }
-.field input:focus, .field select:focus { outline: none; }
-.field input:focus-visible, .field select:focus-visible {
-  border-color: var(--gold-500);
-  box-shadow: 0 0 0 3px rgba(201, 162, 75, .45);
-  outline: none;
-}
-.field__hint { margin: 0; font-size: .82rem; color: rgba(246, 237, 232, .7); }
-.field__error {
-  display: flex; align-items: center; gap: 6px;
-  margin: 0; font-size: .84rem; font-weight: 500; color: #FFC9C9;
-}
-.field__error[hidden] { display: none; }   /* a classe acima vence o [hidden] nativo sem esta regra */
-.field__error::before { content: "!"; display: grid; place-items: center;
-  width: 16px; height: 16px; flex: none; border-radius: 50%;
-  background: #FFC9C9; color: #6A0C18; font-size: .7rem; font-weight: 600; }
-.field.is-invalid input, .field.is-invalid select { border-color: #FFC9C9; }
+.cta__buy .btn { max-width: 420px; }
 
 .form__note { margin: 0; font-size: .84rem; text-align: center; color: rgba(246, 237, 232, .72); }
 
@@ -710,6 +670,132 @@ body { padding-bottom: 84px; }
   transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
 }
 .js .reveal.is-in { opacity: 1; transform: none; }
+
+/* 1. Cascata dos blocos do hero (cada filho entra um pouco depois do anterior) */
+.hero__copy > .reveal:nth-child(1) { transition-delay: 0ms; }
+.hero__copy > .reveal:nth-child(2) { transition-delay: 90ms; }
+.hero__copy > .reveal:nth-child(3) { transition-delay: 180ms; }
+.hero__copy > .reveal:nth-child(4) { transition-delay: 270ms; }
+.hero__copy > .reveal:nth-child(5) { transition-delay: 360ms; }
+.hero__copy > .reveal:nth-child(6) { transition-delay: 450ms; }
+
+/* 2. Selo "SOB MEDIDA" entra com um pequeno "pop" depois da foto */
+.js .portrait__badge {
+  opacity: 0;
+  transform: scale(.82);
+  animation: badge-pop 480ms var(--ease-out) 620ms forwards;
+}
+@keyframes badge-pop {
+  0%   { opacity: 0; transform: scale(.82); }
+  70%  { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* 3. Parallax sutil na textura de mármore do hero (--parallax-y setado via JS) */
+.hero::before { transform: translateY(var(--parallax-y, 0px)); will-change: transform; }
+
+/* 4. Ícones da faixa de confiança entram em sequência */
+.trust__item:nth-child(1) { transition-delay: 0ms; }
+.trust__item:nth-child(2) { transition-delay: 80ms; }
+.trust__item:nth-child(3) { transition-delay: 160ms; }
+.trust__item:nth-child(4) { transition-delay: 240ms; }
+
+/* 5. Leve inclinação 3D nos cards ao passar o mouse (aplicada via JS, transform some no reset) */
+.card { transform: perspective(800px) rotateX(0deg) rotateY(0deg); transition: transform 200ms var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); }
+
+/* 6. Linhas da tabela "acendem" em sequência ao revelar */
+.js .compare tbody tr {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 380ms var(--ease-out), transform 380ms var(--ease-out);
+}
+.js .compare.is-in tbody tr { opacity: 1; transform: none; }
+.compare.is-in tbody tr:nth-child(1) { transition-delay: 120ms; }
+.compare.is-in tbody tr:nth-child(2) { transition-delay: 190ms; }
+.compare.is-in tbody tr:nth-child(3) { transition-delay: 260ms; }
+.compare.is-in tbody tr:nth-child(4) { transition-delay: 330ms; }
+.compare.is-in tbody tr:nth-child(5) { transition-delay: 400ms; }
+.compare.is-in tbody tr:nth-child(6) { transition-delay: 470ms; }
+
+/* 7. Coluna "Lace sob medida" pulsa uma vez depois que a tabela termina de entrar */
+.js .compare.is-in .is-highlight { animation: highlight-pulse 900ms var(--ease-out) 620ms; }
+@keyframes highlight-pulse {
+  0%   { background-color: rgba(142, 18, 35, .05); }
+  40%  { background-color: rgba(201, 162, 75, .28); }
+  100% { background-color: rgba(142, 18, 35, .05); }
+}
+.compare__table thead .is-highlight.is-highlight { animation: none; }  /* cabeçalho tem fundo próprio, não pulsa */
+
+/* 9. Traço que "desenha" acima de cada número do passo, em sequência */
+.step { position: relative; }
+.step::before {
+  content: "";
+  position: absolute; left: 1.9rem; top: -1.25rem;
+  width: 2px; height: 1rem;
+  background: var(--gold-500);
+  transform-origin: bottom;
+  transform: scaleY(0);
+}
+.js .steps.is-in .step::before {
+  transform: scaleY(1);
+  transition: transform 320ms var(--ease-out);
+}
+.steps.is-in .step:nth-child(1)::before { transition-delay: 80ms; }
+.steps.is-in .step:nth-child(2)::before { transition-delay: 260ms; }
+.steps.is-in .step:nth-child(3)::before { transition-delay: 440ms; }
+.steps.is-in .step:nth-child(4)::before { transition-delay: 620ms; }
+.step:first-child::before { display: none; }  /* o primeiro passo não "vem" de lugar nenhum */
+
+/* 10. Fotos da galeria revelam tipo cortina, de baixo pra cima */
+.js .gallery__item {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 550ms var(--ease-out);
+}
+.js .gallery.is-in .gallery__item { clip-path: inset(0 0 0 0); }
+.gallery.is-in .gallery__item:nth-child(1) { transition-delay: 60ms; }
+.gallery.is-in .gallery__item:nth-child(2) { transition-delay: 140ms; }
+.gallery.is-in .gallery__item:nth-child(3) { transition-delay: 220ms; }
+.gallery.is-in .gallery__item:nth-child(4) { transition-delay: 300ms; }
+.gallery.is-in .gallery__item:nth-child(5) { transition-delay: 380ms; }
+
+/* 11. Zoom lento e contínuo nas fotos da galeria (Ken Burns), pausa no hover */
+.js .gallery__item img { animation: ken-burns 16s ease-in-out infinite alternate; }
+.js .gallery__item:hover img { animation-play-state: paused; }
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+/* 13. Ícone do FAQ vira um "+" que gira até formar "×" ao abrir */
+.faq__item summary { position: relative; padding-right: calc(var(--sp-5) + 28px); }
+.faq__item summary::before,
+.faq__item summary::after {
+  content: "";
+  position: absolute; right: var(--sp-5); top: 50%;
+  background: var(--wine-700);
+  transition: transform var(--dur) var(--ease-out);
+}
+.faq__item summary::before { width: 14px; height: 2px; margin: -1px -7px 0 0; }
+.faq__item summary::after  { width: 2px; height: 14px; margin: -7px -1px 0 0; }
+.faq__item[open] summary::before { transform: rotate(45deg); }
+.faq__item[open] summary::after  { transform: rotate(45deg) scaleY(0); }
+
+/* 14. Respiração sutil no botão principal do hero, pausa no hover/foco */
+.js .hero__actions .btn--primary { animation: cta-breathe 3200ms ease-in-out infinite; }
+.js .hero__actions .btn--primary:hover,
+.js .hero__actions .btn--primary:focus-visible { animation-play-state: paused; }
+@keyframes cta-breathe {
+  0%, 100% { box-shadow: 0 6px 18px rgba(142, 18, 35, .22), 0 0 0 0 rgba(142, 18, 35, .35); }
+  50%      { box-shadow: 0 6px 18px rgba(142, 18, 35, .22), 0 0 0 9px rgba(142, 18, 35, 0); }
+}
+
+/* 15. Barra fixa do mobile: pequeno bounce só na primeira vez que aparece */
+.sticky-cta.is-visible.bounce-once { animation: sticky-bounce 520ms var(--ease-out); }
+@keyframes sticky-bounce {
+  0%   { transform: translateY(120%); }
+  60%  { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
