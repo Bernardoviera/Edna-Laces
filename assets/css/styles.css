@@ -390,6 +390,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .portrait__badge { left: 0; right: auto; transform: translateX(-42%); bottom: 20%; }
 }
 
+/* Hero da página de mentoria: variante dourada, pra não parecer a mesma página do e-book */
+.hero--mentoria .portrait__badge {
+  background: var(--gold-500);
+  color: #2A1B02;
+  border-color: rgba(142, 18, 35, .4);
+}
+.hero--mentoria::before {
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(201, 162, 75, .22) 45%, transparent 48%),
+    linear-gradient(75deg, transparent 60%, rgba(255,255,255,.6) 63%, transparent 66%);
+}
+
 /* ---------- 7. Faixa de confiança ---------- */
 .trust {
   background: var(--wine-900);
