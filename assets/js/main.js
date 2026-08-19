@@ -22,15 +22,18 @@
     el.setAttribute("rel", "noopener");
   });
 
-  /* Todo elemento com [data-checkout] aponta pro link de compra, quando existir.
-     Sem checkoutUrl configurado, mantém o href original (âncora pra seção de planos). */
-  if (CFG.checkoutUrl) {
-    Array.prototype.forEach.call(document.querySelectorAll("[data-checkout]"), function (el) {
-      el.setAttribute("href", CFG.checkoutUrl);
+  /* Todo elemento com [data-checkout="ebook"] ou [data-checkout="mentoria"] aponta pro
+     link de compra daquele produto, quando existir. Sem link configurado, mantém o
+     href original (âncora pra seção "o que você recebe" da própria página). */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-checkout]"), function (el) {
+    var produto = el.getAttribute("data-checkout");
+    var url = produto === "mentoria" ? CFG.checkoutUrlMentoria : CFG.checkoutUrlEbook;
+    if (url) {
+      el.setAttribute("href", url);
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener");
-    });
-  }
+    }
+  });
 
   /* ---------- Dados vindos da configuração ---------- */
   var ig = document.querySelector("[data-instagram]");

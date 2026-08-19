@@ -21,8 +21,10 @@ window.SITE_CONFIG = {
   endereco: "Material digital, acesso após confirmação",
   horarios: "Dúvidas por WhatsApp, Seg a Sáb",
 
-  /* AJUSTE: link de checkout da plataforma de infoproduto (Hotmart, Kiwify, Eduzz...).
-     Enquanto estiver vazio (""), os botões "Quero garantir o meu" levam para a
-     seção de comparação de planos em vez de uma página de pagamento. */
-  checkoutUrl: ""
+  /* AJUSTE: links de checkout da plataforma de infoproduto (Hotmart, Kiwify, Eduzz...) —
+     um pra cada produto, que agora são vendidos em páginas separadas.
+     Enquanto estiverem vazios (""), os botões de compra da respectiva página levam
+     para a seção "o que você recebe" em vez de uma página de pagamento. */
+  checkoutUrlEbook: "",
+  checkoutUrlMentoria: ""
 };
