@@ -352,7 +352,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   margin: 0;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2 / 3;
   background: var(--marble);
   box-shadow: var(--shadow-lg);
 }

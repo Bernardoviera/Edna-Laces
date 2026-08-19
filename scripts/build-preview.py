@@ -17,9 +17,13 @@ OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "preview.html"
 html = (ROOT / "index.html").read_text(encoding="utf-8")
 
 # 1. imagens -> data URI
-for img in sorted((ROOT / "assets/img").glob("*.svg")):
+MIME = {".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".avif": "image/avif"}
+for img in sorted((ROOT / "assets/img").iterdir()):
+    mime = MIME.get(img.suffix.lower())
+    if not mime:
+        continue
     data = base64.b64encode(img.read_bytes()).decode("ascii")
-    html = html.replace(f"assets/img/{img.name}", f"data:image/svg+xml;base64,{data}")
+    html = html.replace(f"assets/img/{img.name}", f"data:{mime};base64,{data}")
 
 # 2. CSS e JS -> embutidos
 css = (ROOT / "assets/css/styles.css").read_text(encoding="utf-8")
