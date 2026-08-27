@@ -634,6 +634,28 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .form__note { margin: 0; font-size: .84rem; text-align: center; color: rgba(246, 237, 232, .72); }
 
+.form-candidatura { display: grid; gap: var(--sp-4); text-align: left; width: 100%; max-width: 34rem; }
+.form-candidatura__row { display: grid; gap: var(--sp-4); grid-template-columns: 1fr; }
+@media (min-width: 560px) { .form-candidatura__row { grid-template-columns: 1fr 1fr; } }
+.field { display: grid; gap: var(--sp-2); }
+.field label { font-size: .88rem; font-weight: 500; }
+.field label span { font-weight: 400; opacity: .72; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  font: inherit;
+  font-size: .96rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.field textarea { resize: vertical; min-height: 4.5rem; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  outline: 2px solid var(--gold-500); outline-offset: 1px;
+}
+.form-candidatura .form__note { text-align: left; }
+
 /* ---------- 15. Rodapé ---------- */
 .site-footer {
   background: #1B0206;

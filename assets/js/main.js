@@ -35,6 +35,31 @@
     }
   });
 
+  /* Formulário de candidatura da mentoria: sem backend, então em vez de enviar
+     os dados pra algum lugar, monta uma mensagem com as respostas e abre o
+     WhatsApp da Edna já preenchido — é só a pessoa confirmar o envio. */
+  var formCandidatura = document.getElementById("form-candidatura");
+  if (formCandidatura) {
+    formCandidatura.setAttribute("action", "https://wa.me/" + WA_NUMBER);
+    formCandidatura.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var dados = new FormData(formCandidatura);
+      var linhas = [
+        "Olá, Edna! Quero me candidatar a uma vaga na mentoria.",
+        "",
+        "Nome: " + dados.get("nome"),
+        "WhatsApp: " + dados.get("whatsapp"),
+        "Área de atuação: " + dados.get("area"),
+        "Já trabalha com mega hair, lace ou perucas? " + dados.get("experiencia")
+      ];
+      var cidade = dados.get("cidade");
+      if (cidade) { linhas.push("Cidade: " + cidade); }
+      var mensagem = dados.get("mensagem");
+      if (mensagem) { linhas.push("", mensagem); }
+      window.open(waLink(linhas.join("\n")), "_blank", "noopener");
+    });
+  }
+
   /* ---------- Dados vindos da configuração ---------- */
   var ig = document.querySelector("[data-instagram]");
   if (ig && CFG.instagram) {
