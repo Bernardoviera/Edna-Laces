@@ -9,7 +9,7 @@ window.SITE_CONFIG = {
   /* WhatsApp para dúvidas antes da compra.
      Formato: código do país + DDD + número, só dígitos.
      Exemplo: (11) 91234-5678  ->  "5511912345678"            */
-  whatsapp: "5500000000000",
+  whatsapp: "5561991216770",
 
   /* Mensagem que já vem escrita quando a cliente clica em "falar no WhatsApp" */
   mensagemPadrao: "Olá, Edna! Vim pelo site e tenho uma dúvida sobre o e-book/mentoria.",
