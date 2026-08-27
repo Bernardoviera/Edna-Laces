@@ -50,7 +50,8 @@
         "Nome: " + dados.get("nome"),
         "WhatsApp: " + dados.get("whatsapp"),
         "Área de atuação: " + dados.get("area"),
-        "Já trabalha com mega hair, lace ou perucas? " + dados.get("experiencia")
+        "Já trabalha com mega hair, lace ou perucas? " + dados.get("experiencia"),
+        "O que busca na mentoria: " + dados.get("objetivo")
       ];
       var cidade = dados.get("cidade");
       if (cidade) { linhas.push("Cidade: " + cidade); }
