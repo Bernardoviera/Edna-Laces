@@ -810,6 +810,7 @@ body { padding-bottom: 84px; }
 .gallery.is-in .gallery__item:nth-child(6) { transition-delay: 460ms; }
 .gallery.is-in .gallery__item:nth-child(7) { transition-delay: 540ms; }
 .gallery.is-in .gallery__item:nth-child(8) { transition-delay: 620ms; }
+.gallery.is-in .gallery__item:nth-child(9) { transition-delay: 700ms; }
 
 /* 11. Zoom lento e contínuo nas fotos da galeria (Ken Burns), pausa no hover */
 .js .gallery__item img { animation: ken-burns 16s ease-in-out infinite alternate; }
