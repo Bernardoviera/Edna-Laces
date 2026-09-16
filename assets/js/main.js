@@ -9,6 +9,56 @@
   var WA_NUMBER = String(CFG.whatsapp || "").replace(/\D/g, "");
   var DEFAULT_MSG = CFG.mensagemPadrao || "Olá! Vim pelo site e quero agendar uma avaliação.";
 
+
+  /* ---------- Meta Pixel: eventos das ações reais do funil ---------- */
+  var META_PIXEL_ID = "1606532724818038";
+  if (!window.ednaMetaInitialized) {
+    window.ednaMetaInitialized = true;
+    !function(f,b,e,v,n,t,s) {
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=true;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=true;t.src=v;
+      s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+    }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq("init", META_PIXEL_ID);
+    window.fbq("trackSingle", META_PIXEL_ID, "PageView");
+  }
+
+  function metaTrack(eventName, params) {
+    // Tracking must never prevent navigation or the application form.
+    try {
+      if (typeof window.fbq === "function") {
+        window.fbq("trackSingle", META_PIXEL_ID, eventName, params || {});
+      }
+    } catch (err) { /* Pixel blocked/unavailable: keep the site working. */ }
+  }
+  var pagePath = window.location.pathname;
+  var pageProduct = /(?:^|\/)mentoria(?:\.html)?\/?$/.test(pagePath) ? "mentoria" :
+    (/(?:^|\/)ebook(?:\.html)?\/?$/.test(pagePath) ? "ebook" : "");
+  function productParams(product) {
+    return {
+      content_ids: [product],
+      content_type: "product",
+      content_name: product === "mentoria" ?
+        "Mentoria de Confecção Profissional de Microtelas" :
+        "E-book de Confecção Profissional de Microtelas"
+    };
+  }
+  if (pageProduct) {
+    metaTrack("ViewContent", productParams(pageProduct));
+  }
+  function isPaymentUrl(value) {
+    try {
+      var url = new URL(value, window.location.href);
+      return /^https?:$/.test(url.protocol) &&
+        url.origin !== window.location.origin &&
+        !/(^|\.)(wa\.me|whatsapp\.com)$/.test(url.hostname);
+    } catch (err) { return false; }
+  }
+  // No Purchase/AddPaymentInfo: only the payment platform can confirm them.
+  // No AddToCart: this site has no cart.
+
   /* ---------- Link do WhatsApp ---------- */
   function waLink(message) {
     return "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(message || DEFAULT_MSG);
@@ -18,6 +68,9 @@
      Um texto em data-wa personaliza a mensagem daquele botão. */
   Array.prototype.forEach.call(document.querySelectorAll("[data-wa]"), function (el) {
     el.setAttribute("href", waLink(el.getAttribute("data-wa")));
+    el.addEventListener("click", function () {
+      metaTrack("Contact", { content_name: pageProduct || "inicio", contact_method: "WhatsApp" });
+    });
     el.setAttribute("target", "_blank");
     el.setAttribute("rel", "noopener");
   });
@@ -30,6 +83,11 @@
     var url = produto === "mentoria" ? CFG.checkoutUrlMentoria : CFG.checkoutUrlEbook;
     if (url) {
       el.setAttribute("href", url);
+      el.addEventListener("click", function () {
+        if (isPaymentUrl(el.href)) {
+          metaTrack("InitiateCheckout", productParams(produto));
+        }
+      });
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener");
     }
@@ -43,6 +101,7 @@
     formCandidatura.setAttribute("action", "https://wa.me/" + WA_NUMBER);
     formCandidatura.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!formCandidatura.checkValidity()) { return; }
       var dados = new FormData(formCandidatura);
       var linhas = [
         "Olá, Edna! Quero me candidatar a uma vaga na mentoria.",
@@ -58,6 +117,9 @@
       var mensagem = dados.get("mensagem");
       if (mensagem) { linhas.push("", mensagem); }
       window.open(waLink(linhas.join("\n")), "_blank", "noopener");
+      // Completed local application handed off to WhatsApp; message delivery is not confirmed.
+      // Never send names, phone numbers or free-text answers to Meta.
+      metaTrack("Lead", { content_name: "Candidatura à mentoria", content_category: "mentoria", lead_source: "formulario_whatsapp" });
     });
   }
 
@@ -236,3 +298,4 @@
   }
 
 })();
+

@@ -25,6 +25,7 @@ window.SITE_CONFIG = {
      um pra cada produto, que agora são vendidos em páginas separadas.
      Enquanto estiverem vazios (""), os botões de compra da respectiva página levam
      para a seção "o que você recebe" em vez de uma página de pagamento. */
-  checkoutUrlEbook: "",
+  checkoutUrlEbook: "https://pay.hotmart.com/B107635545Y",
   checkoutUrlMentoria: ""
 };
+
