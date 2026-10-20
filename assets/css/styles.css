@@ -524,7 +524,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   padding: var(--sp-2) var(--sp-4);
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 1.5rem;   /* arredonda de ponta a ponta com 1 linha, sem virar "ovo" quando o texto quebra em 3 */
   font-size: .9rem;
 }
 
